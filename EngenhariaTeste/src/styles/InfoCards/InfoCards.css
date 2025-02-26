@@ -1,0 +1,51 @@
+.Cardgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+  align-items: center;
+  justify-content: center;
+  margin-top: 7.25em;
+  margin-right: 2em;
+  position: relative;
+}
+.Cardgroup .Card {
+  background-color: #414141;
+  height: 25em;
+  width: 25em;
+  border-radius: 3em;
+}
+.Cardgroup .Card .CardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5em;
+}
+.Cardgroup .table {
+  text-align: center;
+  height: 70%;
+}
+.Cardgroup .table .itemTable {
+  transition: 0.25s;
+}
+.Cardgroup .table .itemTable:nth-child(odd) {
+  background-color: #4B4B4B;
+}
+.Cardgroup .table .itemTable:nth-child(odd):hover {
+  background-color: #FDB913;
+  cursor: pointer;
+}
+.Cardgroup .table .itemTable:nth-child(odd):hover .task {
+  color: #4B4B4B;
+}
+.Cardgroup .table .itemTable:nth-child(even) {
+  background-color: #414141;
+}
+.Cardgroup .table .itemTable:nth-child(even):hover {
+  cursor: pointer;
+  background-color: #FDB913;
+}
+.Cardgroup .table .itemTable:nth-child(even):hover .task {
+  color: #414141;
+}
+
+/*# sourceMappingURL=InfoCards.css.map */

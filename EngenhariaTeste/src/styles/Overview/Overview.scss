@@ -1,0 +1,84 @@
+$DwYellow: #FDB913;
+$DwLightGray: #4B4B4B;
+$DwMediumGray: #414141;
+$DwBoldGray: #2D2D2D;
+$DwFont: "Exo", serif;
+
+$Vermelho: red;
+$Verde: rgb(91, 248, 0);
+
+
+
+.Background{
+    position:relative;
+    left: 300px;
+}
+
+
+.Area{
+    margin-top: 2em;
+    .AreaContent{
+        background-color: $DwMediumGray;
+        height: 20em;
+        width: 45em;
+        border-radius: 1em;
+
+    }
+    
+    .TitleArea{
+        display: flex;
+        height: 2em;
+        align-items: center;
+        
+    }
+
+    .table{
+        text-align: center;
+        height: 90%;
+ 
+        .itemTable{
+            transition: 0.25s;
+    
+            &:nth-child(odd) {
+                background-color: $DwLightGray; 
+        
+                &:hover{
+                    background-color: $DwYellow;
+        
+                    .task{
+                        color: $DwLightGray;
+                    }
+                }
+            };
+    
+            &:nth-child(even) {
+                background-color: $DwMediumGray; 
+        
+                &:hover{
+                    background-color: $DwYellow;
+        
+                    .task{
+                        color: $DwMediumGray;
+                    }
+                }
+            };
+    
+        }   
+    }
+
+
+}
+
+
+.naoIniciada{
+    color: red;
+}
+
+.Concluida{
+    color: rgb(91, 248, 0);;
+}
+
+.emProgresso{
+    color: $DwYellow;
+}
+

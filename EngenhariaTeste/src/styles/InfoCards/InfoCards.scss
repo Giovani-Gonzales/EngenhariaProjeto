@@ -1,0 +1,68 @@
+$DwYellow: #FDB913;
+$DwLightGray: #4B4B4B;
+$DwMediumGray: #414141;
+$DwBoldGray: #2D2D2D;
+$DwFont: "Exo", serif;
+
+.Cardgroup{
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+    align-items: center;
+    justify-content: center;
+    margin-top: 7.25em;
+    margin-right: 2em;
+    position: relative;
+    
+    .Card{
+        background-color: $DwMediumGray;
+        height: 25em;
+        width: 25em;
+        border-radius: 3em;
+
+        .CardHeader{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 5em;
+        }
+        
+        
+    }
+
+    .table{
+        text-align: center;
+        height: 70%;
+ 
+        .itemTable{
+            transition: 0.25s;
+    
+            &:nth-child(odd) {
+                background-color: $DwLightGray; 
+        
+                &:hover{
+                    background-color: $DwYellow;
+                    cursor: pointer;
+        
+                    .task{
+                        color: $DwLightGray;
+                    }
+                }
+            };
+    
+            &:nth-child(even) {
+                background-color: $DwMediumGray; 
+        
+                &:hover{
+                    cursor: pointer;
+                    background-color: $DwYellow;
+        
+                    .task{
+                        color: $DwMediumGray;
+                    }
+                }
+            };
+    
+        }   
+    }
+}

@@ -1,0 +1,58 @@
+.Background {
+  position: relative;
+  left: 300px;
+}
+
+.Area {
+  margin-top: 2em;
+}
+.Area .AreaContent {
+  background-color: #414141;
+  height: 20em;
+  width: 45em;
+  border-radius: 1em;
+}
+.Area .TitleArea {
+  display: flex;
+  height: 2em;
+  align-items: center;
+}
+.Area .table {
+  text-align: center;
+  height: 90%;
+}
+.Area .table .itemTable {
+  transition: 0.25s;
+}
+.Area .table .itemTable:nth-child(odd) {
+  background-color: #4B4B4B;
+}
+.Area .table .itemTable:nth-child(odd):hover {
+  background-color: #FDB913;
+}
+.Area .table .itemTable:nth-child(odd):hover .task {
+  color: #4B4B4B;
+}
+.Area .table .itemTable:nth-child(even) {
+  background-color: #414141;
+}
+.Area .table .itemTable:nth-child(even):hover {
+  background-color: #FDB913;
+}
+.Area .table .itemTable:nth-child(even):hover .task {
+  color: #414141;
+}
+
+.naoIniciada {
+  color: red;
+}
+
+.Concluida {
+  color: rgb(91, 248, 0);
+}
+
+.emProgresso {
+  color: #FDB913;
+}
+
+/*# sourceMappingURL=Overview.css.map */

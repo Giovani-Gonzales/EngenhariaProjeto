@@ -1,0 +1,33 @@
+
+body{
+  margin: 0;
+  background-color: #2D2D2D;
+  font-family: "Exo", serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+::-webkit-scrollbar {
+  width: 5px; 
+  height: 12px; 
+}
+
+::-webkit-scrollbar-track {
+  background-color: #2D2D2D; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #FDB913; 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #4B4B4B; 
+}
+
+::-webkit-scrollbar-horizontal {
+  height: 10px;
+}

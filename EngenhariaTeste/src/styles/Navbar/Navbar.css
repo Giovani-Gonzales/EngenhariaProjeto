@@ -1,0 +1,59 @@
+.Content {
+  display: flex;
+}
+
+.navHeader {
+  height: 10em;
+  display: flex;
+  align-items: center;
+  margin-left: 1em;
+}
+
+.HighlightText {
+  color: #FDB913;
+  font-weight: bold;
+}
+
+.navBackground {
+  background-color: #414141;
+  height: 100vh;
+  width: 300px;
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
+  position: fixed;
+  text-decoration: none;
+}
+
+.dwLogo {
+  display: flex;
+  height: 6em;
+}
+
+.UserText {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1em;
+}
+
+.NormalText {
+  color: white;
+}
+
+.navItem {
+  display: flex;
+  background-color: #4B4B4B;
+  padding-left: 2em;
+  height: 4em;
+  align-items: center;
+  transition: 0.25s;
+}
+.navItem .ItemIcon {
+  font-size: 2em;
+  margin-right: 20px;
+}
+.navItem:hover {
+  background-color: #414141;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=Navbar.css.map */
