@@ -1,0 +1,52 @@
+{
+  "tarefas": [
+    {
+      "id": "dfea",
+      "name": "PRIMEIRA",
+      "inicio": "2025-02-27",
+      "fim": "2026-02-27",
+      "status": "Concluida",
+      "progresso": 100
+    },
+    {
+      "id": "e256",
+      "name": "SEGUNDA",
+      "inicio": "2025-02-20",
+      "fim": "2026-02-28",
+      "status": "Concluida",
+      "progresso": 100
+    },
+    {
+      "id": "9dec",
+      "name": "TERCEIRA",
+      "inicio": "2025-02-27",
+      "fim": "2026-03-01",
+      "status": "Concluida",
+      "progresso": 100
+    },
+    {
+      "id": "f395",
+      "name": "Testee",
+      "inicio": "2025-02-27",
+      "fim": "2028-09-22",
+      "status": "Inativa",
+      "progresso": 0
+    },
+    {
+      "id": "199f",
+      "name": "teste1",
+      "inicio": "2025-02-27",
+      "fim": "22222-02-22",
+      "status": "Inativa",
+      "progresso": 0
+    },
+    {
+      "id": "08a7",
+      "name": "teste3",
+      "inicio": "2025-02-27",
+      "fim": "2004-02-22",
+      "status": "Inativa",
+      "progresso": 0
+    }
+  ]
+}

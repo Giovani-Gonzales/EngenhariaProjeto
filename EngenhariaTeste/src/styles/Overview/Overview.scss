@@ -32,53 +32,76 @@ $Verde: rgb(91, 248, 0);
         
     }
 
-    .table{
+    .table {
         text-align: center;
         height: 90%;
- 
-        .itemTable{
+    
+        .itemTable {
             transition: 0.25s;
+            position: relative; 
+            cursor: pointer;
     
             &:nth-child(odd) {
-                background-color: $DwLightGray; 
-        
-                &:hover{
+                background-color: $DwLightGray;
+    
+                &:hover {
                     background-color: $DwYellow;
-        
-                    .task{
+    
+                    .task {
                         color: $DwLightGray;
                     }
                 }
             };
     
             &:nth-child(even) {
-                background-color: $DwMediumGray; 
-        
-                &:hover{
+                background-color: $DwMediumGray;
+    
+                &:hover {
                     background-color: $DwYellow;
-        
-                    .task{
+    
+                    .task {
                         color: $DwMediumGray;
                     }
+
                 }
-            };
-    
-        }   
+            }
+        }
+
+        .buttonColumn{
+            width: 10%;
+
+            button{
+                background-color: $DwYellow;
+                width: 3em;
+                border: 2px solid transparent;
+                color: $DwMediumGray;
+                border-radius: 10px;
+                transition: 0.25s;
+                font-size: 20px;
+                margin-right: 30px;
+        
+                &:hover{
+                    background-color: $DwLightGray;
+                    border: 2px solid $DwYellow;
+                    color: white;
+                    border-radius: 10px;
+
+                    
+                }
+            }
+        }
     }
+}    
 
-
-}
-
-
-.naoIniciada{
+.Inativa{
     color: red;
 }
 
 .Concluida{
-    color: rgb(91, 248, 0);;
+    color: rgb(91, 248, 0);
 }
 
-.emProgresso{
+.Pendente{
     color: $DwYellow;
 }
 

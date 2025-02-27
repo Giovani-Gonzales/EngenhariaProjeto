@@ -23,6 +23,8 @@
 }
 .Area .table .itemTable {
   transition: 0.25s;
+  position: relative;
+  cursor: pointer;
 }
 .Area .table .itemTable:nth-child(odd) {
   background-color: #4B4B4B;
@@ -42,8 +44,27 @@
 .Area .table .itemTable:nth-child(even):hover .task {
   color: #414141;
 }
+.Area .table .buttonColumn {
+  width: 10%;
+}
+.Area .table .buttonColumn button {
+  background-color: #FDB913;
+  width: 3em;
+  border: 2px solid transparent;
+  color: #414141;
+  border-radius: 10px;
+  transition: 0.25s;
+  font-size: 20px;
+  margin-right: 30px;
+}
+.Area .table .buttonColumn button:hover {
+  background-color: #4B4B4B;
+  border: 2px solid #FDB913;
+  color: white;
+  border-radius: 10px;
+}
 
-.naoIniciada {
+.Inativa {
   color: red;
 }
 
@@ -51,7 +72,7 @@
   color: rgb(91, 248, 0);
 }
 
-.emProgresso {
+.Pendente {
   color: #FDB913;
 }
 

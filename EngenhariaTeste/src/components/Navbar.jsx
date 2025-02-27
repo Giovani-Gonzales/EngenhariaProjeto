@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 import dwLogo from '../assets/LogoDW.jpeg'
 
@@ -22,25 +23,25 @@ const Navbar = () => {
         </div>
 
         <div className='navBody'>
-          <div className='navItem'>
+          <Link to="/" className='navItem'>
             <FaEye className='HighlightText ItemIcon'/>
             <a className='HighlightText'>Visão Geral</a>
-          </div>
+          </Link>
 
           <div className='navItem'>
             <AiFillDashboard className='HighlightText ItemIcon'/>
             <a className='HighlightText'>Dashboard</a>
           </div>
 
-          <div className='navItem'>
+          <Link to="/all-tasks" className='navItem'>
             <FaTasks className='HighlightText ItemIcon'/>
             <a className='HighlightText'>Todos os Projetos</a>
-          </div>
+          </Link>
 
-          <div className='navItem'>
+          <Link to='/new-tasks' className='navItem'>
             <FaCirclePlus className='HighlightText ItemIcon'/>
             <a className='HighlightText'>Adicionar Tarefa</a>
-          </div>
+          </Link>
         </div>
     </div>
   )

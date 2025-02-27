@@ -1,0 +1,24 @@
+    $DwYellow: #FDB913;
+    $DwLightGray: #4B4B4B;
+    $DwMediumGray: #414141;
+    $DwBoldGray: #2D2D2D;
+    $DwFont: "Exo", serif;
+
+
+.inputBox{
+    display: flex;
+    flex-direction: column;
+    width: auto;
+
+    label{
+        color: $DwYellow;
+    }
+}
+
+input{
+    background-color: $DwLightGray;
+    border: 2px solid $DwYellow;
+    padding: 10px;
+    color: white;
+    border-radius: 10px;
+}

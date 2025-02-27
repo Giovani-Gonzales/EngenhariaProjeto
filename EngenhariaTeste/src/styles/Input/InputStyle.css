@@ -1,0 +1,19 @@
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  padding: 10px;
+}
+.inputBox label {
+  color: #FDB913;
+}
+
+input {
+  background-color: #4B4B4B;
+  border: 2px solid #FDB913;
+  padding: 10px;
+  color: white;
+  border-radius: 10px;
+}
+
+/*# sourceMappingURL=InputStyle.css.map */
