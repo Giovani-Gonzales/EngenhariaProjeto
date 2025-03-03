@@ -1,69 +1,154 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import React from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-
-import Navbar from '../components/Navbar'
+import Navbar from "../components/Navbar";
+import Input from "../components/Input";
 
 import { FaCheck } from "react-icons/fa";
-// Folhas de estilo
-import '../styles/NewTasks/NewTasks.css';
+import { GrLinkNext } from "react-icons/gr";
+import { GrLinkPrevious } from "react-icons/gr";
+
+import "../styles/AllTasks/AllTasks.css";
 
 const AllTasks = () => {
-    const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState([]);
+  const [page, setPage] = useState(1);
+  const [tasksPerPage, setTasksPerPage] = useState(5);
+  const [SearchName, setSearchName] = useState("")
 
+  const requisicaoAPI = () => {
+    axios
+      .get("http://localhost:5000/tarefas")
 
-    const requisicaoAPI = () => {
-        axios.get('http://localhost:5000/tarefas')
-    
+      .then((response) => {
+        setTasks(response.data);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+  
+  useEffect(() => {
+    requisicaoAPI();
+  }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [tasksPerPage]);
+
+  const passaPagina = (pageNumber) => setPage(pageNumber);
+
+  const atualizarProgresso = (id, Novostatus) => {
+    if ((Novostatus = "Concluida")) {
+      axios
+        .patch(`http://localhost:5000/tarefas/${id}`, { progresso: 100 })
         .then((response) => {
-          setTasks(response.data)
+          console.log("Status atualizado:", response.data);
         })
-        .catch(error => {
-          setError(error)
-        })
-      }
-    
-      useEffect(() => {
-        requisicaoAPI()
-      }, [])
+        .catch((error) => console.error("Erro ao atualizar:", error));
+    }
+
+    axios
+      .patch(`http://localhost:5000/tarefas/${id}`, { status: Novostatus })
+      .then((response) => {
+        console.log("Status atualizado:", response.data);
+      })
+      .catch((error) => console.error("Erro ao atualizar:", error));
+    window.location.reload();
+  };
+
+  const indexUltimaTask = page * tasksPerPage;
+  const indexPrimeiraTask = indexUltimaTask - tasksPerPage;
+  const TasksAtuais = tasks.slice(indexPrimeiraTask, indexUltimaTask);
 
   return (
-    <div className='Content'>
+    <div className="Content">
       <Navbar />
-      <div className='BackgroundForm container'>
-        <div className='container Area'>
-          <h1 className='HighlightText TitleArea'>Tarefas</h1>
-                <div className='AreaContent'>
-                    <table className='table'>
-                        <tr>
-                            <th className='HighlightText'>Nome da Tarefa</th>
-                            <th className='HighlightText'>Inicio</th>
-                            <th className='HighlightText'>Status</th>
-                            <th className='HighlightText'>Progresso (%)</th>
-                            <th ></th>
-                        </tr>
-                        {tasks.map ((task) => 
-                                <>
-                                    <tr key={task.id} className='itemTable'>
-                                        <td className='HighlightText task'>{task.name}</td>
-                                        <td className='NormalText'>{task.inicio}</td>
-                                        <td className={task.status}>{task.status}</td>
-                                        <td className='NormalText'>{task.progresso}%</td>
-                                        <td onClick={() => atualizarProgresso(task.id,"Concluida")} className='buttonColumn'>
-                                            <button>
-                                            <FaCheck/>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </>
-                            )}
-                    </table>
-                </div>
-
+      <div className="BackgroundTasks container">
+        <div className="container Area">
+          <h1 className="HighlightText TitleArea">Tarefas</h1>
+          <div className="FiltersArea">
+            <div className="SearchName">
+              <Input
+                label="NOME DA TAREFA:"
+                type="text"
+                name="name"
+                placeholder="Digite o nome da tarefa"
+              />
             </div>
+            <div className="pagesQtd">
+              <label className="HighlightText">TAREFAS P/ PÁGINA</label>
+              <div className="buttonGroup">
+                <button
+                  className={tasksPerPage === 5 ? "ButtonActive" : ""}
+                  onClick={() => setTasksPerPage(5)}
+                >
+                  5
+                </button>
+                <button
+                  className={tasksPerPage === 10 ? "ButtonActive" : ""}
+                  onClick={() => setTasksPerPage(10)}
+                >
+                  10
+                </button>
+                <button
+                  className={tasksPerPage === 50 ? "ButtonActive" : ""}
+                  onClick={() => setTasksPerPage(50)}
+                >
+                  50
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="AreaContent">
+            <table className="table">
+              <tr>
+                <th className="HighlightText">Nome da Tarefa</th>
+                <th className="HighlightText">Inicio</th>
+                <th className="HighlightText">Status</th>
+                <th className="HighlightText">Progresso (%)</th>
+                <th></th>
+              </tr>
+              {TasksAtuais.map((task) => (
+                <>
+                  <tr key={task.id} className="itemTable">
+                    <td className="HighlightText task">{task.name}</td>
+                    <td className="NormalText">{task.inicio}</td>
+                    <td className={task.status}>{task.status}</td>
+                    <td className="NormalText">{task.progresso}%</td>
+                    <td
+                      onClick={() => atualizarProgresso(task.id, "Concluida")}
+                      className="buttonColumn"
+                    >
+                      <button>
+                        <FaCheck />
+                      </button>
+                    </td>
+                  </tr>
+                </>
+              ))}
+            </table>
+
+            <div className="pagination">
+              <button
+                onClick={() => passaPagina(page - 1)}
+                disabled={page === 1}
+              >
+                <GrLinkPrevious />
+              </button>
+              <span className="pageAlt"> Página {page} </span>
+              <button
+                onClick={() => passaPagina(page + 1)}
+                disabled={indexUltimaTask >= tasks.length}
+              >
+                <GrLinkNext />
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
   );
 };
-export default AllTasks
+export default AllTasks;
