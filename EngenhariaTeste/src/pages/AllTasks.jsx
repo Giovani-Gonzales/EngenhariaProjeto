@@ -58,9 +58,13 @@ const AllTasks = () => {
     window.location.reload();
   };
 
+  const filteredTasks = tasks.filter(task =>
+    task.name.toLowerCase().includes(SearchName.toLowerCase())
+  );
+
   const indexUltimaTask = page * tasksPerPage;
   const indexPrimeiraTask = indexUltimaTask - tasksPerPage;
-  const TasksAtuais = tasks.slice(indexPrimeiraTask, indexUltimaTask);
+  const TasksAtuais = filteredTasks.slice(indexPrimeiraTask, indexUltimaTask);
 
   return (
     <div className="Content">
@@ -70,11 +74,13 @@ const AllTasks = () => {
           <h1 className="HighlightText TitleArea">Tarefas</h1>
           <div className="FiltersArea">
             <div className="SearchName">
-              <Input
+            <Input
                 label="NOME DA TAREFA:"
                 type="text"
                 name="name"
                 placeholder="Digite o nome da tarefa"
+                value={SearchName}
+                onChange={(e) => setSearchName(e.target.value)}
               />
             </div>
             <div className="pagesQtd">
