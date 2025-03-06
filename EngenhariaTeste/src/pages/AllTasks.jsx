@@ -15,7 +15,8 @@ const AllTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [page, setPage] = useState(1);
   const [tasksPerPage, setTasksPerPage] = useState(5);
-  const [SearchName, setSearchName] = useState("")
+  const [SearchName, setSearchName] = useState("");
+  const [TaskExpandida, setTaskExpandida] = useState(null);
 
   const requisicaoAPI = () => {
     axios
@@ -28,7 +29,7 @@ const AllTasks = () => {
         setError(error);
       });
   };
-  
+
   useEffect(() => {
     requisicaoAPI();
   }, []);
@@ -58,13 +59,25 @@ const AllTasks = () => {
     window.location.reload();
   };
 
-  const filteredTasks = tasks.filter(task =>
+  const filteredTasks = tasks.filter((task) =>
     task.name.toLowerCase().includes(SearchName.toLowerCase())
   );
 
+  const toggleExpandirTask = (taskId) => {
+    if (TaskExpandida === taskId) {
+      setTaskExpandida(null);
+    } else {
+      setTaskExpandida(taskId);
+    }
+  };
+
+  const tasksOrdemInvertida = [...filteredTasks].reverse();
   const indexUltimaTask = page * tasksPerPage;
   const indexPrimeiraTask = indexUltimaTask - tasksPerPage;
-  const TasksAtuais = filteredTasks.slice(indexPrimeiraTask, indexUltimaTask);
+  const TasksAtuais = tasksOrdemInvertida.slice(
+    indexPrimeiraTask,
+    indexUltimaTask
+  );
 
   return (
     <div className="Content">
@@ -74,7 +87,7 @@ const AllTasks = () => {
           <h1 className="HighlightText TitleArea">Tarefas</h1>
           <div className="FiltersArea">
             <div className="SearchName">
-            <Input
+              <Input
                 label="NOME DA TAREFA:"
                 type="text"
                 name="name"
@@ -82,6 +95,34 @@ const AllTasks = () => {
                 value={SearchName}
                 onChange={(e) => setSearchName(e.target.value)}
               />
+            </div>
+            <div className="StatusFilter">
+              <label className="HighlightText">STATUS</label>
+              <div className="buttonGroup">
+                <button
+                  className={tasksPerPage === 5 ? "ButtonActive" : ""}
+                  onClick={() => setTasksPerPage(5)}
+                >
+                  INATIVA
+                </button>
+                <button
+                  className={tasksPerPage === 10 ? "ButtonActive" : ""}
+                  onClick={() => setTasksPerPage(10)}
+                >
+                  CONCLUIDA
+                </button>
+                <button
+                  className={tasksPerPage === 50 ? "ButtonActive" : ""}
+                  onClick={() => setTasksPerPage(50)}
+                >
+                  EM PROGRESSO
+                </button>
+              </div>
+            </div>
+
+            <div className="ProgressFilter">
+              <label className="HighlightText">STATUS</label>
+              <input type="range" name="progress" min="0" max="100" />
             </div>
             <div className="pagesQtd">
               <label className="HighlightText">TAREFAS P/ PÁGINA</label>
@@ -118,7 +159,11 @@ const AllTasks = () => {
               </tr>
               {TasksAtuais.map((task) => (
                 <>
-                  <tr key={task.id} className="itemTable">
+                  <tr
+                    key={task.id}
+                    className="itemTable"
+                    onClick={() => toggleExpandirTask(task.id)}
+                  >
                     <td className="HighlightText task">{task.name}</td>
                     <td className="NormalText">{task.inicio}</td>
                     <td className={task.status}>{task.status}</td>
@@ -132,6 +177,34 @@ const AllTasks = () => {
                       </button>
                     </td>
                   </tr>
+
+                  {TaskExpandida === task.id && (
+                    <tr>
+                      <td colSpan="5" className="TaskExpandida">
+                        <div className="backgroundExpandedTask">
+                          <h3 className="HighlightText">Detalhes da Tarefa</h3>
+                          <div className="infoTask">
+                            <p>
+                              <strong className="HighlightText">Nome:</strong> {task.name}
+                            </p>
+                            <p>
+                              <strong className="HighlightText">Início:</strong> {task.inicio}
+                            </p>
+                            <p>
+                              <strong className="HighlightText">Status:</strong> {task.status}
+                            </p>
+                            <p>
+                              <strong className="HighlightText">Progresso:</strong> {task.progresso}%
+                            </p>
+                            <p>
+                              <strong className="HighlightText">Descrição:</strong>{" "}
+                              {task.descricao || "N/A"}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </>
               ))}
             </table>

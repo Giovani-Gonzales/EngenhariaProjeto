@@ -46,6 +46,64 @@ $Verde: rgb(91, 248, 0);
 
     
         }
+
+        .TaskExpandida{
+            .backgroundExpandedTask{
+                padding: 20px;
+                background-color: $DwMediumGray;
+                border:1px solid $DwYellow;
+                text-align: left;
+                margin-top: 1em;
+                margin-bottom: 1em;
+                border-radius: 1em;
+                color: white;
+
+                .infoTask{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 2em;
+                }
+            }
+        }
+
+
+        .StatusFilter{
+            flex-direction: column;
+
+            .buttonGroup{
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                button{
+                    background-color: $DwLightGray;
+                    color: $DwYellow;
+                    border: 3px solid $DwYellow;
+                    width: auto;
+                    height: 40px;
+                    border-radius: 1em;
+                    font-weight: bold;
+                    transition: 0.25s;
+
+                }
+                .ButtonActive{
+                    background-color: $DwYellow;
+                    color: $DwLightGray;
+                    border: 3px solid $DwYellow;
+                    transform: scale(0.9);
+                    font-weight: bold;
+
+                }
+            }
+        }
+
+        .ProgressFilter {
+            display: flex;
+            flex-direction: column;
+
+            &:-moz-range-progress {
+            background-color: pink;
+          }
+        }
         .pagesQtd{
             flex-direction: column;
 
@@ -68,8 +126,7 @@ $Verde: rgb(91, 248, 0);
                     background-color: $DwYellow;
                     color: $DwLightGray;
                     border: 3px solid $DwYellow;
-                    width: 35px;
-                    height: 35px;
+                    transform: scale(0.9);
                     font-weight: bold;
 
                 }

@@ -29,6 +29,53 @@
   width: 40px;
   border-radius: 100%;
 }
+.BackgroundTasks .Area .TaskExpandida .backgroundExpandedTask {
+  padding: 20px;
+  background-color: #414141;
+  border: 1px solid #FDB913;
+  text-align: left;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  color: white;
+}
+.BackgroundTasks .Area .TaskExpandida .backgroundExpandedTask .infoTask {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2em;
+}
+.BackgroundTasks .Area .StatusFilter {
+  flex-direction: column;
+}
+.BackgroundTasks .Area .StatusFilter .buttonGroup {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.BackgroundTasks .Area .StatusFilter .buttonGroup button {
+  background-color: #4B4B4B;
+  color: #FDB913;
+  border: 3px solid #FDB913;
+  width: auto;
+  height: 40px;
+  border-radius: 1em;
+  font-weight: bold;
+  transition: 0.25s;
+}
+.BackgroundTasks .Area .StatusFilter .buttonGroup .ButtonActive {
+  background-color: #FDB913;
+  color: #4B4B4B;
+  border: 3px solid #FDB913;
+  transform: scale(0.9);
+  font-weight: bold;
+}
+.BackgroundTasks .Area .ProgressFilter {
+  display: flex;
+  flex-direction: column;
+}
+.BackgroundTasks .Area .ProgressFilter:-moz-range-progress {
+  background-color: pink;
+}
 .BackgroundTasks .Area .pagesQtd {
   flex-direction: column;
 }
@@ -51,8 +98,7 @@
   background-color: #FDB913;
   color: #4B4B4B;
   border: 3px solid #FDB913;
-  width: 35px;
-  height: 35px;
+  transform: scale(0.9);
   font-weight: bold;
 }
 .BackgroundTasks .Area .TitleArea {
