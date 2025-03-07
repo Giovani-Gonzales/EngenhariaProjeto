@@ -182,24 +182,76 @@ const AllTasks = () => {
                     <tr>
                       <td colSpan="5" className="TaskExpandida">
                         <div className="backgroundExpandedTask">
-                          <h3 className="HighlightText">Detalhes da Tarefa</h3>
+                          <h3 className="HighlightText">
+                            Detalhes da Tarefa: {task.name}
+                          </h3>
                           <div className="infoTask">
                             <p>
-                              <strong className="HighlightText">Nome:</strong> {task.name}
+                              <strong className="HighlightText">Nome:</strong>{" "}
+                              {task.name}
                             </p>
                             <p>
-                              <strong className="HighlightText">Início:</strong> {task.inicio}
+                              <strong className="HighlightText">Início:</strong>{" "}
+                              {task.inicio}
                             </p>
                             <p>
-                              <strong className="HighlightText">Status:</strong> {task.status}
+                              <strong className="HighlightText">Status:</strong>{" "}
+                              {task.status}
                             </p>
                             <p>
-                              <strong className="HighlightText">Progresso:</strong> {task.progresso}%
+                              <strong className="HighlightText">
+                                Progresso:
+                              </strong>{" "}
+                              {task.progresso}%
                             </p>
                             <p>
-                              <strong className="HighlightText">Descrição:</strong>{" "}
+                              <strong className="HighlightText">
+                                Descrição:
+                              </strong>{" "}
                               {task.descricao || "N/A"}
                             </p>
+                          </div>
+                          <div className="subtasksArea">
+                            <table className="table">
+                              <tr>
+                                <th className="HighlightText">
+                                  Nome da Tarefa
+                                </th>
+                                <th className="HighlightText">Inicio</th>
+                                <th className="HighlightText">Status</th>
+                                <th className="HighlightText">Progresso (%)</th>
+                                <th></th>
+                              </tr>
+                              {task.subTasks.map((subTask) => (
+                                  <tr
+                                    key={subTask.id}
+                                    className="itemTable"
+                                  >
+                                    <td className="HighlightText task">
+                                      {subTask.name}
+                                    </td>
+                                    <td className="NormalText">
+                                      {subTask.inicio}
+                                    </td>
+                                    <td className={subTask.status}>
+                                      {subTask.status}
+                                    </td>
+                                    <td className="NormalText">
+                                      {subTask.progresso}%
+                                    </td>
+                                    <td
+                                      onClick={() =>
+                                        atualizarProgresso(subTask.id, "Concluida")
+                                      }
+                                      className="buttonColumn"
+                                    >
+                                      <button>
+                                        <FaCheck />
+                                      </button>
+                                    </td>
+                                  </tr>
+                              ))}
+                            </table>
                           </div>
                         </div>
                       </td>

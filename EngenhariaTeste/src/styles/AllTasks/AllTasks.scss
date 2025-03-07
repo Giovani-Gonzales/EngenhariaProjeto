@@ -99,10 +99,6 @@ $Verde: rgb(91, 248, 0);
         .ProgressFilter {
             display: flex;
             flex-direction: column;
-
-            &:-moz-range-progress {
-            background-color: pink;
-          }
         }
         .pagesQtd{
             flex-direction: column;
