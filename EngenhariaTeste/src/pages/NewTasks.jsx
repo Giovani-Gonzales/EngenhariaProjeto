@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
-
 import Navbar from "../components/Navbar";
 import Input from "../components/Input";
 
@@ -10,7 +9,7 @@ import "../styles/NewTasks/NewTasks.css";
 const NewTasks = () => {
   const [nameTask, setNameTask] = useState("");
   const [fimTask, setFimTask] = useState("");
-
+  
   const handleSubmit = (e) => {
     const newTask = {
       name: nameTask,
@@ -18,6 +17,8 @@ const NewTasks = () => {
       fim: fimTask,
       status: "Inativa",
       progresso: 0,
+      subTasks: [],
+      descricao: "",
     };
 
     axios

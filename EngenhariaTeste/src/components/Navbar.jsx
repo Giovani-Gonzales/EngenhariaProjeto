@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom';
+import axios from "axios"
 
 import dwLogo from '../assets/LogoDW.jpeg'
 
@@ -11,7 +12,29 @@ import { AiFillDashboard } from "react-icons/ai";
 import { FaTasks } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
 
+
+
 const Navbar = () => {
+
+  const [Error, setError] = useState() 
+  const [Users, setUsers] = useState([])
+
+  const requisicaoAPI = () => {
+    axios
+      .get("http://localhost:5000/users")
+
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+
+  useEffect(() => {
+    requisicaoAPI();
+  }, []);
+
   return (
     <div className='navBackground'>
         <div className='navHeader'>

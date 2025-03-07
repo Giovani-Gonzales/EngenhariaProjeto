@@ -1,64 +1,44 @@
 {
   "tarefas": [
     {
-      "id": "dfea",
-      "name": "PRIMEIRA",
-      "inicio": "2025-02-27",
-      "fim": "2026-02-27",
-      "status": "Concluida",
-      "progresso": 100,
-      "subTasks": [
-        {
-          "id": "ad92",
-          "name": "SUBTASK1",
-          "inicio": "2025-02-27",
-          "fim": "2026-02-27",
-          "status": "Inativa",
-          "progresso": 100
-        },
-        {
-          "id": "lf93",
-          "name": "SUBTASK2",
-          "inicio": "2025-02-27",
-          "fim": "2026-02-27",
-          "status": "Inativa",
-          "progresso": 100
-        },
-        {
-          "id": "of23",
-          "name": "SUBTASK3",
-          "inicio": "2025-02-27",
-          "fim": "2026-02-27",
-          "status": "Inativa",
-          "progresso": 100
-        }
-      ]
-    },
-    {
-      "id": "e256",
-      "name": "SEGUNDA",
-      "inicio": "2025-02-20",
-      "fim": "2026-02-28",
-      "status": "Concluida",
-      "progresso": 100,
-      "subTasks": []
-    },
-    {
-      "id": "9dec",
-      "name": "TERCEIRA",
-      "inicio": "2025-02-27",
-      "fim": "2026-03-01",
-      "status": "Concluida",
-      "progresso": 100,
-      "subTasks": []
-    },
-    {
-      "id": "a397",
-      "name": "nnnnnnnnnnn",
+      "id": "c43e",
+      "name": "Task01",
       "inicio": "2025-03-07",
-      "fim": "2222-02-22",
+      "fim": "2025-02-06",
       "status": "Inativa",
-      "progresso": 0
+      "progresso": 0,
+      "subTasks": [],
+      "descricao": ""
+    },
+    {
+      "id": "4d00",
+      "name": "TaskTeste02",
+      "inicio": "2025-03-07",
+      "fim": "2025-02-06",
+      "status": "Concluida",
+      "progresso": 100,
+      "subTasks": [],
+      "descricao": ""
+    },
+    {
+      "id": "fe16",
+      "name": "TaskTeste 220",
+      "inicio": "2025-03-07",
+      "fim": "2025-02-06",
+      "status": "Inativa",
+      "progresso": 0,
+      "subTasks": [],
+      "descricao": ""
+    }
+  ],
+  "users":[
+    {
+      "id": "c43e",
+      "name": "UserTest",
+      "email": "teste@paranoa.com.br",
+      "setor": "Engenharia",
+      "subTasks": [],
+      "descricao": ""
     }
   ]
 }
