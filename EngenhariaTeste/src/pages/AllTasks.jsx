@@ -17,6 +17,10 @@ const AllTasks = () => {
   const [tasksPerPage, setTasksPerPage] = useState(5);
   const [SearchName, setSearchName] = useState("");
   const [TaskExpandida, setTaskExpandida] = useState(null);
+  const [SubTaskExpandida, setSubTaskExpandida] = useState(null);
+  const [faseSelecionada, setFaseSelecionada] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const requisicaoAPI = () => {
     axios
@@ -68,6 +72,30 @@ const AllTasks = () => {
       setTaskExpandida(null);
     } else {
       setTaskExpandida(taskId);
+    }
+  };
+
+  const toggleExpandirSubTask = (taskId) => {
+    if (TaskExpandida === taskId) {
+      setSubTaskExpandida(null);
+    } else {
+      setSubTaskExpandida(taskId);
+    }
+  };
+
+  const finalizaSubTask = (id, Novostatus, arquivo) => {
+    if (arquivo != "") {
+      axios
+        .patch(`http://localhost:5000/tarefas/${id}`, { status: Novostatus })
+        .then((response) => {
+          console.log("Status atualizado:", response.data);
+        })
+        .catch((error) => console.error("Erro ao atualizar:", error));
+      window.location.reload();
+    } else {
+      alert(
+        "Para concluir a tarefa, é necessário atribuir um arquivo a mesma!"
+      );
     }
   };
 
@@ -211,46 +239,115 @@ const AllTasks = () => {
                               {task.descricao || "N/A"}
                             </p>
                           </div>
+
                           <div className="subtasksArea">
+                            <div className="buttonGroupStages">
+                              <button
+                                className={
+                                  faseSelecionada === 0 ? "ButtonActive" : ""
+                                }
+                                onClick={() => setFaseSelecionada(0)}
+                              >
+                                FASE 1 - Planejamento
+                              </button>
+                              <button
+                                className={
+                                  faseSelecionada === 1 ? "ButtonActive" : ""
+                                }
+                                onClick={() => setFaseSelecionada(1)}
+                              >
+                                FASE 2 - Projeto e Desenvolvimento do Produto
+                              </button>
+                              <button
+                                className={
+                                  faseSelecionada === 2 ? "ButtonActive" : ""
+                                }
+                                onClick={() => setFaseSelecionada(2)}
+                              >
+                                FASE 3 - Projeto e Desenvolvimento do Processo
+                              </button>
+                              <button
+                                className={
+                                  faseSelecionada === 3 ? "ButtonActive" : ""
+                                }
+                                onClick={() => setFaseSelecionada(3)}
+                              >
+                                FASE 4 - Validacao do Produto e do Processo
+                              </button>
+                              <button
+                                className={
+                                  faseSelecionada === 4 ? "ButtonActive" : ""
+                                }
+                                onClick={() => setFaseSelecionada(4)}
+                              >
+                                FASE 5 - Retroalimentação e Ação Corretiva
+                              </button>
+                            </div>
                             <table className="table">
                               <tr>
                                 <th className="HighlightText">
                                   Nome da Tarefa
                                 </th>
-                                <th className="HighlightText">Inicio</th>
                                 <th className="HighlightText">Status</th>
-                                <th className="HighlightText">Progresso (%)</th>
+
                                 <th></th>
                               </tr>
-                              {task.subTasks.map((subTask) => (
-                                  <tr
-                                    key={subTask.id}
-                                    className="itemTable"
-                                  >
-                                    <td className="HighlightText task">
-                                      {subTask.name}
-                                    </td>
-                                    <td className="NormalText">
-                                      {subTask.inicio}
-                                    </td>
-                                    <td className={subTask.status}>
-                                      {subTask.status}
-                                    </td>
-                                    <td className="NormalText">
-                                      {subTask.progresso}%
-                                    </td>
-                                    <td
+
+                              {task.fases[faseSelecionada].dependencias.map(
+                                (subTask) => (
+                                  <>
+                                    <tr
                                       onClick={() =>
-                                        atualizarProgresso(subTask.id, "Concluida")
+                                        toggleExpandirSubTask(subTask.id)
                                       }
-                                      className="buttonColumn"
+                                      key={subTask.id}
+                                      className="itemTable"
                                     >
-                                      <button>
-                                        <FaCheck />
-                                      </button>
-                                    </td>
-                                  </tr>
-                              ))}
+                                      <td className="task">{subTask.nome}</td>
+                                      <td
+                                        className={
+                                          subTask.status == true
+                                            ? "Concluida"
+                                            : "Pendente"
+                                        }
+                                      >
+                                        {subTask.status == true
+                                          ? "Finalizada"
+                                          : "Pendente"}
+                                      </td>
+                                      <td className="buttonColumn">
+                                        <button
+                                          onClick={() =>
+                                            finalizaSubTask(
+                                              subTask.id,
+                                              true,
+                                              subTask.arquivo
+                                            )
+                                          }
+                                        >
+                                          <FaCheck />
+                                        </button>
+                                      </td>
+                                    </tr>
+
+                                    {SubTaskExpandida === subTask.id && (
+                                      <tr className="expanded-row">
+                                        <td colSpan="3">
+                                          <div className="backgroundExpandedTask">
+                                            {subTask.nome}
+                                            <div className="file-input-container">
+                                              <input
+                                                type="file"
+                                                accept="image/png, image/jpeg"
+                                              />
+                                            </div>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    )}
+                                  </>
+                                )
+                              )}
                             </table>
                           </div>
                         </div>

@@ -107,6 +107,7 @@ $Verde: rgb(91, 248, 0);
                 display: flex;
                 gap: 10px;
                 align-items: center;
+
                 button{
                     background-color: $DwLightGray;
                     color: $DwYellow;
@@ -174,6 +175,74 @@ $Verde: rgb(91, 248, 0);
         }
     }
 
+    .buttonGroup{
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        button{
+            background-color: $DwLightGray;
+            color: $DwYellow;
+            border: 3px solid $DwYellow;
+            width: 40px;
+            height: 40px;
+            border-radius: 1em;
+            font-weight: bold;
+            transition: 0.25
+
+         }
+         .ButtonActive{
+            background-color: $DwYellow;
+            color: $DwLightGray;
+            border: 3px solid $DwYellow;
+            transform: scale(0.9);
+            font-weight: bold
+
+         }
+    }
+
+
+    .subtasksArea{
+
+        table{
+            text-align: left;
+        }
+        .buttonGroupStages{
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap:20px;
+    
+            button{
+                background-color: $DwLightGray;
+                color: $DwYellow;
+                border: 3px solid $DwYellow;
+                width: auto;
+                height: 3em;
+                border-radius: 1em;
+                font-weight: bold;
+                transition: 0.25
+    
+             }
+             .ButtonActive{
+                background-color: $DwYellow;
+                color: $DwLightGray;
+                border: 3px solid $DwYellow;
+                transform: scale(0.9);
+                font-weight: bold
+    
+             }
+        }
+    }
+
     
 }
+
+.expanded-content {
+    padding: 12px;
+    background-color: #f0f0f0;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
