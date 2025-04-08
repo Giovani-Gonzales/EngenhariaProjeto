@@ -19,13 +19,12 @@ const AllTasks = () => {
   const [TaskExpandida, setTaskExpandida] = useState(null);
   const [SubTaskExpandida, setSubTaskExpandida] = useState(null);
   const [faseSelecionada, setFaseSelecionada] = useState(0);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   const requisicaoAPI = () => {
     axios
       .get("http://localhost:5000/tarefas")
-
       .then((response) => {
         setTasks(response.data);
       })
@@ -99,6 +98,70 @@ const AllTasks = () => {
     }
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handlePreview = () => {
+    if (!selectedFile) {
+      alert("Nenhum arquivo selecionado para visualização!");
+      return;
+    }
+    window.open(previewImage, "_blank");
+  };
+
+  const handleUpload = (taskId, subTaskId) => {
+    if (!selectedFile) {
+      alert("Por favor, selecione um arquivo primeiro!");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result.split(",")[1];
+
+      // Primeiro buscamos a task completa
+      axios
+        .get(`http://localhost:5000/tarefas/${taskId}`)
+        .then((response) => {
+          const task = response.data;
+          let updatedFases = [...task.fases];
+
+          // Encontramos e atualizamos a subtask específica
+          updatedFases = updatedFases.map((fase) => {
+            const updatedDependencias = fase.dependencias.map((dependencia) => {
+              if (dependencia.id === subTaskId) {
+                return {
+                  ...dependencia,
+                  arquivo: base64String,
+                };
+              }
+              return dependencia;
+            });
+            return { ...fase, dependencias: updatedDependencias };
+          });
+
+          // Enviamos apenas as fases atualizadas
+          return axios.patch(`http://localhost:5000/tarefas/${taskId}`, {
+            fases: updatedFases,
+          });
+        })
+        .then(() => {
+          alert("Arquivo enviado e tarefa concluída com sucesso!");
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar arquivo:", error);
+          alert("Erro ao enviar arquivo!");
+        });
+    };
+    reader.readAsDataURL(selectedFile);
+  };
+
   const tasksOrdemInvertida = [...filteredTasks].reverse();
   const indexUltimaTask = page * tasksPerPage;
   const indexPrimeiraTask = indexUltimaTask - tasksPerPage;
@@ -129,7 +192,7 @@ const AllTasks = () => {
               <div className="buttonGroup">
                 <button
                   className={tasksPerPage === 5 ? "ButtonActive" : ""}
-                  onClick={() => setTasksPerPage(5)}
+                  onClick={() => alert(tasks.tarefas)}
                 >
                   INATIVA
                 </button>
@@ -289,8 +352,6 @@ const AllTasks = () => {
                                   Nome da Tarefa
                                 </th>
                                 <th className="HighlightText">Status</th>
-
-                                <th></th>
                               </tr>
 
                               {task.fases[faseSelecionada].dependencias.map(
@@ -334,12 +395,73 @@ const AllTasks = () => {
                                       <tr className="expanded-row">
                                         <td colSpan="3">
                                           <div className="backgroundExpandedTask">
-                                            {subTask.nome}
+                                            <h3 className="HighlightText">
+                                              Detalhes da Tarefa: "
+                                              {subTask.nome}"
+                                            </h3>
+                                            <div className="infoTask">
+                                              <p>
+                                                <strong className="HighlightText">
+                                                  Nome:
+                                                </strong>{" "}
+                                                {subTask.nome}
+                                              </p>
+                                              <p>
+                                                <strong className="HighlightText">
+                                                  Status:
+                                                </strong>{" "}
+                                                {subTask.status == true
+                                                  ? "Finalizada"
+                                                  : "Pendente"}
+                                              </p>
+                                              <p>
+                                                <strong className="HighlightText">
+                                                  Data Limite:
+                                                </strong>{" "}
+                                                {task.fim}
+                                              </p>
+                                            </div>
+                                            {subTask.arquivo != '' ? (
+                                                <div className="file-preview">
+                                                  <img
+                                                    src={`data:image/png;base64,${subTask.arquivo}`}
+                                                    alt="Arquivo enviado"
+                                                    style={{
+                                                      maxWidth: "600px",
+                                                      maxHeight: "600px",
+                                                      marginTop: "10px",
+                                                    }}
+                                                  />
+                                                </div>
+                                              ) : "NENHUM ARQUIVO FOI ANEXADO A ESSA TAREFA"}
                                             <div className="file-input-container">
                                               <input
                                                 type="file"
                                                 accept="image/png, image/jpeg"
+                                                onChange={handleFileChange}
                                               />
+                                              <div className="file-actions">
+                                                <button
+                                                  onClick={handlePreview}
+                                                  disabled={!selectedFile}
+                                                >
+                                                  Visualizar
+                                                </button>
+                                                <button
+                                                  onClick={() =>
+                                                    handleUpload(
+                                                      task.id,
+                                                      subTask.id
+                                                    )
+                                                  }
+                                                  disabled={!selectedFile}
+                                                >
+                                                  Enviar Arquivo
+                                                </button>
+                                              </div>
+                                              <button className="finishButton">
+                                                Concluir Tarefa
+                                              </button>
                                             </div>
                                           </div>
                                         </td>
