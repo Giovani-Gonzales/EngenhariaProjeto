@@ -237,3 +237,69 @@ $Verde: rgb(91, 248, 0);
 
     
 }
+
+.file-preview{
+    margin-top:20px;
+    margin-bottom:30px;
+
+
+    img{
+        height: 200px;
+    }
+                           
+}
+
+.file-input-container{
+    margin-top:20px;
+    margin-bottom:30px;
+
+
+    .file-actions{
+        display: flex;
+        gap: 1em;
+        button{
+            margin-top: 10px;
+            background-color: $DwYellow;
+            border: none;
+            color: $DwMediumGray;
+            border: 2px solid $DwYellow;
+            border-radius: 10px;
+            padding: 10px;
+            transition: 0.25s;
+
+
+            &:hover{
+                background-color: $DwMediumGray;
+                color: $DwYellow;
+                border: 2px solid $DwYellow;
+                border-radius: 10px;
+                padding: 10px;
+                transform: scale(0.95);
+            }
+        }
+    }
+}
+
+.backgroundExpandedTask{
+    button{
+        margin-top: 10px;
+        background-color: $DwYellow;
+        border: none;
+        color: $DwMediumGray;
+        border: 2px solid $DwYellow;
+        border-radius: 10px;
+        padding: 10px;
+        transition: 0.25s;
+
+
+        &:hover{
+            background-color: $DwMediumGray;
+            color: $DwYellow;
+            border: 2px solid $DwYellow;
+            border-radius: 10px;
+            padding: 10px;
+            transform: scale(0.95);
+        }
+    }
+
+}

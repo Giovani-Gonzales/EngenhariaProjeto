@@ -184,4 +184,58 @@
   font-weight: bold;
 }
 
+.file-preview {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.file-preview img {
+  height: 200px;
+}
+
+.file-input-container {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.file-input-container .file-actions {
+  display: flex;
+  gap: 1em;
+}
+.file-input-container .file-actions button {
+  margin-top: 10px;
+  background-color: #FDB913;
+  border: none;
+  color: #414141;
+  border: 2px solid #FDB913;
+  border-radius: 10px;
+  padding: 10px;
+  transition: 0.25s;
+}
+.file-input-container .file-actions button:hover {
+  background-color: #414141;
+  color: #FDB913;
+  border: 2px solid #FDB913;
+  border-radius: 10px;
+  padding: 10px;
+  transform: scale(0.95);
+}
+
+.backgroundExpandedTask button {
+  margin-top: 10px;
+  background-color: #FDB913;
+  border: none;
+  color: #414141;
+  border: 2px solid #FDB913;
+  border-radius: 10px;
+  padding: 10px;
+  transition: 0.25s;
+}
+.backgroundExpandedTask button:hover {
+  background-color: #414141;
+  color: #FDB913;
+  border: 2px solid #FDB913;
+  border-radius: 10px;
+  padding: 10px;
+  transform: scale(0.95);
+}
+
 /*# sourceMappingURL=AllTasks.css.map */

@@ -75,22 +75,43 @@ const AllTasks = () => {
   };
 
   const toggleExpandirSubTask = (taskId) => {
+    setSelectedFile(null)
     if (TaskExpandida === taskId) {
       setSubTaskExpandida(null);
-    } else {
+    } 
+    else {
       setSubTaskExpandida(taskId);
     }
   };
 
-  const finalizaSubTask = (id, Novostatus, arquivo) => {
+  const finalizaSubTask = (taskId, arquivo, subTaskId) => {
     if (arquivo != "") {
       axios
-        .patch(`http://localhost:5000/tarefas/${id}`, { status: Novostatus })
+        .get(`http://localhost:5000/tarefas/${taskId}`)
         .then((response) => {
-          console.log("Status atualizado:", response.data);
+          const task = response.data;
+          let updatedFases = [...task.fases];
+
+          updatedFases = updatedFases.map((fase) => {
+            const updatedDependencias = fase.dependencias.map((dependencia) => {
+              if (dependencia.id === subTaskId) {
+                return {
+                  ...dependencia,
+                  status: true,
+                };
+              }
+              return dependencia;
+            });
+            return { ...fase, dependencias: updatedDependencias };
+          });
+          
+          return axios.patch(`http://localhost:5000/tarefas/${taskId}`, {
+            fases: updatedFases,
+          });
+          
         })
-        .catch((error) => console.error("Erro ao atualizar:", error));
-      window.location.reload();
+        .catch((error) => alert("Erro ao atualizar:", error));
+        window.location.reload();
     } else {
       alert(
         "Para concluir a tarefa, é necessário atribuir um arquivo a mesma!"
@@ -308,7 +329,7 @@ const AllTasks = () => {
                               <button
                                 className={
                                   faseSelecionada === 0 ? "ButtonActive" : ""
-                                }
+                                 }
                                 onClick={() => setFaseSelecionada(0)}
                               >
                                 FASE 1 - Planejamento
@@ -364,7 +385,9 @@ const AllTasks = () => {
                                       key={subTask.id}
                                       className="itemTable"
                                     >
-                                      <td className="task">{subTask.nome}</td>
+                                      <td className="task">
+                                        {subTask.nome.split(":")[0].trim()}
+                                      </td>
                                       <td
                                         className={
                                           subTask.status == true
@@ -379,10 +402,9 @@ const AllTasks = () => {
                                       <td className="buttonColumn">
                                         <button
                                           onClick={() =>
-                                            finalizaSubTask(
+                                            atualizarProgresso(
                                               subTask.id,
                                               true,
-                                              subTask.arquivo
                                             )
                                           }
                                         >
@@ -397,14 +419,19 @@ const AllTasks = () => {
                                           <div className="backgroundExpandedTask">
                                             <h3 className="HighlightText">
                                               Detalhes da Tarefa: "
-                                              {subTask.nome}"
+                                              {subTask.nome
+                                                .split(":")[0]
+                                                .trim()}
+                                              "
                                             </h3>
                                             <div className="infoTask">
                                               <p>
                                                 <strong className="HighlightText">
                                                   Nome:
                                                 </strong>{" "}
-                                                {subTask.nome}
+                                                {subTask.nome
+                                                  .split(":")[0]
+                                                  .trim()}
                                               </p>
                                               <p>
                                                 <strong className="HighlightText">
@@ -421,29 +448,29 @@ const AllTasks = () => {
                                                 {task.fim}
                                               </p>
                                             </div>
-                                            {subTask.arquivo != '' ? (
-                                                <div className="file-preview">
-                                                  <img
-                                                    src={`data:image/png;base64,${subTask.arquivo}`}
-                                                    alt="Arquivo enviado"
-                                                    style={{
-                                                      maxWidth: "600px",
-                                                      maxHeight: "600px",
-                                                      marginTop: "10px",
-                                                    }}
-                                                  />
-                                                </div>
-                                              ) : "NENHUM ARQUIVO FOI ANEXADO A ESSA TAREFA"}
+                                            {subTask.arquivo != "" ? (
+                                              <div className="file-preview">
+                                                <img
+                                                  src={`data:image/png;base64,${subTask.arquivo}`}
+                                                  alt="Visualizar Arquivo"
+                                                  onClick={handlePreview}
+                                                />
+                                              </div>
+                                            ) : (
+                                              <div className="file-preview">
+                                                AINDA NENHUM ARQUIVO FOI ANEXADO
+                                                A ESSA TAREFA
+                                              </div>
+                                            )}
                                             <div className="file-input-container">
+                                              <p className="HighlightText">UPLOAD DE ARQUIVO</p>
                                               <input
                                                 type="file"
-                                                accept="image/png, image/jpeg"
                                                 onChange={handleFileChange}
                                               />
-                                              <div className="file-actions">
+                                              <div className="file-actions" style={!selectedFile ? { display: 'none' } : {}}>
                                                 <button
                                                   onClick={handlePreview}
-                                                  disabled={!selectedFile}
                                                 >
                                                   Visualizar
                                                 </button>
@@ -454,15 +481,24 @@ const AllTasks = () => {
                                                       subTask.id
                                                     )
                                                   }
-                                                  disabled={!selectedFile}
                                                 >
                                                   Enviar Arquivo
                                                 </button>
                                               </div>
-                                              <button className="finishButton">
-                                                Concluir Tarefa
-                                              </button>
                                             </div>
+                                            <button 
+                                            className="finishButton"
+                                            onClick={() =>
+                                            finalizaSubTask(
+                                              task.id,
+                                              subTask.arquivo,
+                                              subTask.id
+                                            )
+                                            }
+                                            style={!subTask.arquivo ? { display: 'none' } : {}}
+                                            >
+                                              Concluir Tarefa
+                                            </button>
                                           </div>
                                         </td>
                                       </tr>
