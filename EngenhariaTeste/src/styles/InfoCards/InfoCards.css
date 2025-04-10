@@ -22,30 +22,24 @@
 }
 .Cardgroup .table {
   text-align: center;
-  height: 70%;
 }
 .Cardgroup .table .itemTable {
+  height: 4em;
   transition: 0.25s;
+  position: relative;
+  cursor: pointer;
 }
 .Cardgroup .table .itemTable:nth-child(odd) {
   background-color: #4B4B4B;
 }
 .Cardgroup .table .itemTable:nth-child(odd):hover {
-  background-color: #FDB913;
-  cursor: pointer;
-}
-.Cardgroup .table .itemTable:nth-child(odd):hover .task {
-  color: #4B4B4B;
+  transform: scale(1.01);
 }
 .Cardgroup .table .itemTable:nth-child(even) {
   background-color: #414141;
 }
 .Cardgroup .table .itemTable:nth-child(even):hover {
-  cursor: pointer;
-  background-color: #FDB913;
-}
-.Cardgroup .table .itemTable:nth-child(even):hover .task {
-  color: #414141;
+  transform: scale(1.01);
 }
 
 /*# sourceMappingURL=InfoCards.css.map */

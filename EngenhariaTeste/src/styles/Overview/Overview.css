@@ -22,6 +22,7 @@
   height: 90%;
 }
 .Area .table .itemTable {
+  height: 3em;
   transition: 0.25s;
   position: relative;
   cursor: pointer;
@@ -30,19 +31,13 @@
   background-color: #4B4B4B;
 }
 .Area .table .itemTable:nth-child(odd):hover {
-  background-color: #FDB913;
-}
-.Area .table .itemTable:nth-child(odd):hover .task {
-  color: #4B4B4B;
+  transform: scale(1.01);
 }
 .Area .table .itemTable:nth-child(even) {
   background-color: #414141;
 }
 .Area .table .itemTable:nth-child(even):hover {
-  background-color: #FDB913;
-}
-.Area .table .itemTable:nth-child(even):hover .task {
-  color: #414141;
+  transform: scale(1.01);
 }
 .Area .table .buttonColumn {
   width: 10%;

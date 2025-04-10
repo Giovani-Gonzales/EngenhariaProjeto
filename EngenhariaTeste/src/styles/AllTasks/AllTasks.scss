@@ -83,6 +83,7 @@ $Verde: rgb(91, 248, 0);
                     border-radius: 1em;
                     font-weight: bold;
                     transition: 0.25s;
+                    
 
                 }
                 .ButtonActive{
@@ -140,7 +141,7 @@ $Verde: rgb(91, 248, 0);
         .FiltersArea{
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content:space-between;
             font-weight: bold;
         }
     
@@ -212,6 +213,29 @@ $Verde: rgb(91, 248, 0);
             flex-wrap: wrap;
             align-items: center;
             gap:20px;
+
+            .ButtonDisabled{
+                background-color: rgba(254, 85, 85, 0.2);
+                color: white;
+                border: 3px solid rgba(254, 85, 85, 0.2);
+                width: auto;
+                height: 3em;
+                border-radius: 1em;
+                font-weight: bold;
+                transition: 0.25;
+                transform: scale(0.95);
+            }
+
+            .ButtonFinish{
+                background-color: rgb(87, 255, 128);
+                color: white;
+                border: 3px solid rgb(87, 255, 128);
+                width: auto;
+                height: 3em;
+                border-radius: 1em;
+                font-weight: bold;
+                transition: 0.25
+            }
     
             button{
                 background-color: $DwLightGray;
@@ -223,15 +247,15 @@ $Verde: rgb(91, 248, 0);
                 font-weight: bold;
                 transition: 0.25
     
-             }
-             .ButtonActive{
+            }
+            .ButtonActive{
                 background-color: $DwYellow;
                 color: $DwLightGray;
                 border: 3px solid $DwYellow;
                 transform: scale(0.9);
                 font-weight: bold
     
-             }
+            }
         }
     }
 
@@ -245,8 +269,10 @@ $Verde: rgb(91, 248, 0);
 
     img{
         height: 200px;
+        border: $DwLightGray 1em solid;
+        border-radius: 1em;
     }
-                           
+                        
 }
 
 .file-input-container{
@@ -303,3 +329,48 @@ $Verde: rgb(91, 248, 0);
     }
 
 }
+
+#modalImage{
+    height: 400px;
+}
+
+.fileModal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    flex-direction: column;
+}
+
+#download-button{
+    margin-top: 2em;
+        background-color: $DwYellow;
+        border: none;
+        color: $DwMediumGray;
+        border: 2px solid $DwYellow;
+        border-radius: 10px;
+        padding: 10px;
+        transition: 0.25s;
+
+
+        &:hover{
+            background-color: $DwMediumGray;
+            color: $DwYellow;
+            border: 2px solid $DwYellow;
+            border-radius: 10px;
+            padding: 10px;
+            transform: scale(0.95);
+        }
+}
+
+#finalizaFaseButton{
+    width: 100%;
+}
+
+

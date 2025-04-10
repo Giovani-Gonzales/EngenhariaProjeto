@@ -32,37 +32,28 @@ $DwFont: "Exo", serif;
 
     .table{
         text-align: center;
-        height: 70%;
- 
-        .itemTable{
+        
+        .itemTable {
+            height: 4em;
             transition: 0.25s;
-    
+            position: relative; 
+            cursor: pointer;
+        
             &:nth-child(odd) {
-                background-color: $DwLightGray; 
+                background-color: $DwLightGray;
         
-                &:hover{
-                    background-color: $DwYellow;
-                    cursor: pointer;
-        
-                    .task{
-                        color: $DwLightGray;
-                    }
+                &:hover {
+                    transform: scale(1.01);
                 }
             };
-    
+        
             &:nth-child(even) {
-                background-color: $DwMediumGray; 
+                background-color: $DwMediumGray;
         
-                &:hover{
-                    cursor: pointer;
-                    background-color: $DwYellow;
-        
-                    .task{
-                        color: $DwMediumGray;
-                    }
+                &:hover {
+                    transform: scale(1.01);
                 }
-            };
-    
-        }   
+            }
+        }
     }
 }

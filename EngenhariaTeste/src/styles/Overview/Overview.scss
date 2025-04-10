@@ -37,6 +37,7 @@ $Verde: rgb(91, 248, 0);
         height: 90%;
     
         .itemTable {
+            height: 3em;
             transition: 0.25s;
             position: relative; 
             cursor: pointer;
@@ -45,11 +46,7 @@ $Verde: rgb(91, 248, 0);
                 background-color: $DwLightGray;
     
                 &:hover {
-                    background-color: $DwYellow;
-    
-                    .task {
-                        color: $DwLightGray;
-                    }
+                    transform: scale(1.01);
                 }
             };
     
@@ -57,12 +54,7 @@ $Verde: rgb(91, 248, 0);
                 background-color: $DwMediumGray;
     
                 &:hover {
-                    background-color: $DwYellow;
-    
-                    .task {
-                        color: $DwMediumGray;
-                    }
-
+                    transform: scale(1.01);
                 }
             }
         }

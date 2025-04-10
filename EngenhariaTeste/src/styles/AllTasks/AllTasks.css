@@ -166,6 +166,27 @@
   align-items: center;
   gap: 20px;
 }
+.BackgroundTasks .subtasksArea .buttonGroupStages .ButtonDisabled {
+  background-color: rgba(254, 85, 85, 0.2);
+  color: white;
+  border: 3px solid rgba(254, 85, 85, 0.2);
+  width: auto;
+  height: 3em;
+  border-radius: 1em;
+  font-weight: bold;
+  transition: 0.25;
+  transform: scale(0.95);
+}
+.BackgroundTasks .subtasksArea .buttonGroupStages .ButtonFinish {
+  background-color: rgb(87, 255, 128);
+  color: white;
+  border: 3px solid rgb(87, 255, 128);
+  width: auto;
+  height: 3em;
+  border-radius: 1em;
+  font-weight: bold;
+  transition: 0.25;
+}
 .BackgroundTasks .subtasksArea .buttonGroupStages button {
   background-color: #4B4B4B;
   color: #FDB913;
@@ -190,6 +211,8 @@
 }
 .file-preview img {
   height: 200px;
+  border: #4B4B4B 1em solid;
+  border-radius: 1em;
 }
 
 .file-input-container {
@@ -236,6 +259,47 @@
   border-radius: 10px;
   padding: 10px;
   transform: scale(0.95);
+}
+
+#modalImage {
+  height: 400px;
+}
+
+.fileModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  flex-direction: column;
+}
+
+#download-button {
+  margin-top: 2em;
+  background-color: #FDB913;
+  border: none;
+  color: #414141;
+  border: 2px solid #FDB913;
+  border-radius: 10px;
+  padding: 10px;
+  transition: 0.25s;
+}
+#download-button:hover {
+  background-color: #414141;
+  color: #FDB913;
+  border: 2px solid #FDB913;
+  border-radius: 10px;
+  padding: 10px;
+  transform: scale(0.95);
+}
+
+#finalizaFaseButton {
+  width: 100%;
 }
 
 /*# sourceMappingURL=AllTasks.css.map */

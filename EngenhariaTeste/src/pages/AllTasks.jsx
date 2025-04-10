@@ -18,9 +18,11 @@ const AllTasks = () => {
   const [SearchName, setSearchName] = useState("");
   const [TaskExpandida, setTaskExpandida] = useState(null);
   const [SubTaskExpandida, setSubTaskExpandida] = useState(null);
-  const [faseSelecionada, setFaseSelecionada] = useState(0);
+  const [faseSelecionada, setFaseSelecionada] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [liberaBotaoFase, setLiberaBotaoFase] = useState(false);
 
   const requisicaoAPI = () => {
     axios
@@ -43,18 +45,10 @@ const AllTasks = () => {
 
   const passaPagina = (pageNumber) => setPage(pageNumber);
 
-  const atualizarProgresso = (id, Novostatus) => {
-    if ((Novostatus = "Concluida")) {
-      axios
-        .patch(`http://localhost:5000/tarefas/${id}`, { progresso: 100 })
-        .then((response) => {
-          console.log("Status atualizado:", response.data);
-        })
-        .catch((error) => console.error("Erro ao atualizar:", error));
-    }
+  const atualizarProgresso = (id) => {
 
     axios
-      .patch(`http://localhost:5000/tarefas/${id}`, { status: Novostatus })
+      .patch(`http://localhost:5000/tarefas/${id}`, { status: "Concluida" })
       .then((response) => {
         console.log("Status atualizado:", response.data);
       })
@@ -66,7 +60,15 @@ const AllTasks = () => {
     task.name.toLowerCase().includes(SearchName.toLowerCase())
   );
 
+  const alternaFase = (taskId, fase) => {
+    setFaseSelecionada(fase);
+    verificaFaseConcluida(taskId, fase);
+
+  };
+
   const toggleExpandirTask = (taskId) => {
+    setFaseSelecionada(0);
+    verificaFaseConcluida(taskId, 0);
     if (TaskExpandida === taskId) {
       setTaskExpandida(null);
     } else {
@@ -75,47 +77,120 @@ const AllTasks = () => {
   };
 
   const toggleExpandirSubTask = (taskId) => {
-    setSelectedFile(null)
+    setSelectedFile(null);
     if (TaskExpandida === taskId) {
       setSubTaskExpandida(null);
-    } 
-    else {
+    } else {
       setSubTaskExpandida(taskId);
     }
   };
 
-  const finalizaSubTask = (taskId, arquivo, subTaskId) => {
-    if (arquivo != "") {
-      axios
-        .get(`http://localhost:5000/tarefas/${taskId}`)
-        .then((response) => {
-          const task = response.data;
-          let updatedFases = [...task.fases];
+  const finalizaFase = (taskId, faseIndex) => {
+    axios
+      .get(`http://localhost:5000/tarefas/${taskId}`)
+      .then((response) => {
+        const task = response.data;
 
-          updatedFases = updatedFases.map((fase) => {
-            const updatedDependencias = fase.dependencias.map((dependencia) => {
-              if (dependencia.id === subTaskId) {
-                return {
-                  ...dependencia,
-                  status: true,
-                };
-              }
-              return dependencia;
-            });
-            return { ...fase, dependencias: updatedDependencias };
-          });
-          
-          return axios.patch(`http://localhost:5000/tarefas/${taskId}`, {
-            fases: updatedFases,
-          });
-          
-        })
-        .catch((error) => alert("Erro ao atualizar:", error));
-        window.location.reload();
-    } else {
-      alert(
-        "Para concluir a tarefa, é necessário atribuir um arquivo a mesma!"
+        const updatedFases = task.fases.map((fase, index) => {
+          if (index === faseIndex) {
+            return { ...fase, status: true };
+          }
+          return fase;
+        });
+        return axios.patch(`http://localhost:5000/tarefas/${taskId}`, {
+          fases: updatedFases,
+        });
+        
+      })
+      .then(() => {
+        if (faseIndex = 4) {
+          atualizarProgresso(taskId)
+        }
+          window.location.reload();
+        
+      })
+      .catch((error) => {
+        console.error("Erro ao atualizar fase:", error);
+        alert("Erro ao atualizar o status da fase!");
+      });
+  };
+
+  const verificaFaseConcluida = async (taskId, faseIndex) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/tarefas/${taskId}`
       );
+      const fase = response.data.fases[faseIndex];
+
+      const todasConcluidas = fase.dependencias.every(
+        (dependencia) => dependencia.status === true
+      );
+
+      if (todasConcluidas) {
+        setLiberaBotaoFase(true);
+      } else {
+        setLiberaBotaoFase(false);
+      }
+
+      return todasConcluidas;
+    } catch (error) {
+      console.error("Erro na verificação:", error);
+      return false;
+    }
+  };
+
+  const finalizaSubTask = async (taskId, arquivo, subTaskId) => {
+    if (!arquivo) {
+      return alert("Para concluir a tarefa, é necessário atribuir um arquivo!");
+    }
+
+    try {
+      // 1. Buscar a tarefa atual
+      const response = await axios.get(
+        `http://localhost:5000/tarefas/${taskId}`
+      );
+      const task = response.data;
+
+      // 2. Calcular o valor percentual de cada dependência
+      const totalDependencias = task.fases.reduce(
+        (total, fase) => total + fase.dependencias.length,
+        0
+      );
+      const valorPorDependencia = 100 / totalDependencias;
+
+      // 3. Atualizar as fases e calcular novo progresso
+      let updatedFases = task.fases.map((fase) => ({
+        ...fase,
+        dependencias: fase.dependencias.map((dependencia) =>
+          dependencia.id === subTaskId
+            ? { ...dependencia, status: true, arquivo }
+            : dependencia
+        ),
+      }));
+
+      // 4. Calcular novo progresso
+      const novasConcluidas = updatedFases.reduce(
+        (total, fase) =>
+          total + fase.dependencias.filter((d) => d.status).length,
+        0
+      );
+      const novoProgresso = Math.min(
+        100,
+        Math.round(novasConcluidas * valorPorDependencia)
+      );
+
+      // 5. Enviar atualização
+      await axios.patch(`http://localhost:5000/tarefas/${taskId}`, {
+        fases: updatedFases,
+        progresso: novoProgresso,
+      });
+
+      // 6. Verificar se fase foi concluída e recarregar
+      await verificaFaseConcluida(taskId, faseSelecionada);
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao atualizar:", error);
+      alert("Erro ao atualizar a tarefa");
     }
   };
 
@@ -127,7 +202,7 @@ const AllTasks = () => {
     }
   };
 
-  const handlePreview = () => {
+  const handlePreview = (file) => {
     if (!selectedFile) {
       alert("Nenhum arquivo selecionado para visualização!");
       return;
@@ -152,7 +227,6 @@ const AllTasks = () => {
           const task = response.data;
           let updatedFases = [...task.fases];
 
-          // Encontramos e atualizamos a subtask específica
           updatedFases = updatedFases.map((fase) => {
             const updatedDependencias = fase.dependencias.map((dependencia) => {
               if (dependencia.id === subTaskId) {
@@ -166,7 +240,6 @@ const AllTasks = () => {
             return { ...fase, dependencias: updatedDependencias };
           });
 
-          // Enviamos apenas as fases atualizadas
           return axios.patch(`http://localhost:5000/tarefas/${taskId}`, {
             fases: updatedFases,
           });
@@ -208,34 +281,7 @@ const AllTasks = () => {
                 onChange={(e) => setSearchName(e.target.value)}
               />
             </div>
-            <div className="StatusFilter">
-              <label className="HighlightText">STATUS</label>
-              <div className="buttonGroup">
-                <button
-                  className={tasksPerPage === 5 ? "ButtonActive" : ""}
-                  onClick={() => alert(tasks.tarefas)}
-                >
-                  INATIVA
-                </button>
-                <button
-                  className={tasksPerPage === 10 ? "ButtonActive" : ""}
-                  onClick={() => setTasksPerPage(10)}
-                >
-                  CONCLUIDA
-                </button>
-                <button
-                  className={tasksPerPage === 50 ? "ButtonActive" : ""}
-                  onClick={() => setTasksPerPage(50)}
-                >
-                  EM PROGRESSO
-                </button>
-              </div>
-            </div>
 
-            <div className="ProgressFilter">
-              <label className="HighlightText">STATUS</label>
-              <input type="range" name="progress" min="0" max="100" />
-            </div>
             <div className="pagesQtd">
               <label className="HighlightText">TAREFAS P/ PÁGINA</label>
               <div className="buttonGroup">
@@ -280,14 +326,6 @@ const AllTasks = () => {
                     <td className="NormalText">{task.inicio}</td>
                     <td className={task.status}>{task.status}</td>
                     <td className="NormalText">{task.progresso}%</td>
-                    <td
-                      onClick={() => atualizarProgresso(task.id, "Concluida")}
-                      className="buttonColumn"
-                    >
-                      <button>
-                        <FaCheck />
-                      </button>
-                    </td>
                   </tr>
 
                   {TaskExpandida === task.id && (
@@ -327,42 +365,66 @@ const AllTasks = () => {
                           <div className="subtasksArea">
                             <div className="buttonGroupStages">
                               <button
-                                className={
+                                className={`${
                                   faseSelecionada === 0 ? "ButtonActive" : ""
-                                 }
-                                onClick={() => setFaseSelecionada(0)}
+                                } ${
+                                  task.fases[0].status ? "ButtonFinish" : ""
+                                }`}
+                                onClick={() => alternaFase(task.id, 0)}
                               >
                                 FASE 1 - Planejamento
                               </button>
                               <button
-                                className={
+                                className={`${
                                   faseSelecionada === 1 ? "ButtonActive" : ""
-                                }
-                                onClick={() => setFaseSelecionada(1)}
+                                } ${
+                                  !task.fases[0].status ? "ButtonDisabled" : ""
+                                } ${
+                                  task.fases[1].status ? "ButtonFinish" : ""
+                                }`}
+                                onClick={() => alternaFase(task.id, 1)}
+                                disabled={task.fases[0].status === false}
                               >
                                 FASE 2 - Projeto e Desenvolvimento do Produto
                               </button>
                               <button
-                                className={
+                                className={`${
                                   faseSelecionada === 2 ? "ButtonActive" : ""
-                                }
-                                onClick={() => setFaseSelecionada(2)}
+                                } ${
+                                  !task.fases[1].status ? "ButtonDisabled" : ""
+                                } ${
+                                  task.fases[2].status ? "ButtonFinish" : ""
+                                }`}
+                                onClick={() => alternaFase(task.id, 2)}
+                                disabled={task.fases[1].status === false}
                               >
                                 FASE 3 - Projeto e Desenvolvimento do Processo
                               </button>
                               <button
-                                className={
+                                className={`${
                                   faseSelecionada === 3 ? "ButtonActive" : ""
-                                }
-                                onClick={() => setFaseSelecionada(3)}
+                                } ${
+                                  !task.fases[2].status ? "ButtonDisabled" : ""
+                                } ${
+                                  task.fases[3].status ? "ButtonFinish" : ""
+                                }`}
+                                onClick={() => alternaFase(task.id, 3)}
+                                disabled={task.fases[2].status === false}
                               >
                                 FASE 4 - Validacao do Produto e do Processo
                               </button>
                               <button
-                                className={
+                                className={`${
                                   faseSelecionada === 4 ? "ButtonActive" : ""
-                                }
-                                onClick={() => setFaseSelecionada(4)}
+                                } ${
+                                  !task.fases[3].status ? "ButtonDisabled" : ""
+                                } ${
+                                  task.fases[4].status ? "ButtonFinish" : ""
+                                }`}
+                                onClick={() => {
+                                  alternaFase(task.id, 4);
+                                }}
+                                disabled={task.fases[3].status === false}
                               >
                                 FASE 5 - Retroalimentação e Ação Corretiva
                               </button>
@@ -373,6 +435,7 @@ const AllTasks = () => {
                                   Nome da Tarefa
                                 </th>
                                 <th className="HighlightText">Status</th>
+                                <th className="HighlightText">Prazo Limite</th>
                               </tr>
 
                               {task.fases[faseSelecionada].dependencias.map(
@@ -383,7 +446,7 @@ const AllTasks = () => {
                                         toggleExpandirSubTask(subTask.id)
                                       }
                                       key={subTask.id}
-                                      className="itemTable"
+                                      className="itemTable subTasks"
                                     >
                                       <td className="task">
                                         {subTask.nome.split(":")[0].trim()}
@@ -399,18 +462,7 @@ const AllTasks = () => {
                                           ? "Finalizada"
                                           : "Pendente"}
                                       </td>
-                                      <td className="buttonColumn">
-                                        <button
-                                          onClick={() =>
-                                            atualizarProgresso(
-                                              subTask.id,
-                                              true,
-                                            )
-                                          }
-                                        >
-                                          <FaCheck />
-                                        </button>
-                                      </td>
+                                      <td>20/12/2026</td>
                                     </tr>
 
                                     {SubTaskExpandida === subTask.id && (
@@ -453,8 +505,40 @@ const AllTasks = () => {
                                                 <img
                                                   src={`data:image/png;base64,${subTask.arquivo}`}
                                                   alt="Visualizar Arquivo"
-                                                  onClick={handlePreview}
+                                                  style={{ cursor: "pointer" }}
+                                                  onClick={() =>
+                                                    setModalAberto(true)
+                                                  }
                                                 />
+
+                                                {modalAberto && (
+                                                  <div
+                                                    className="fileModal"
+                                                    onClick={() =>
+                                                      setModalAberto(false)
+                                                    }
+                                                  >
+                                                    <img
+                                                      id="modalImage"
+                                                      src={`data:image/png;base64,${subTask.arquivo}`}
+                                                      onClick={(e) =>
+                                                        e.stopPropagation()
+                                                      }
+                                                    />
+                                                    <a
+                                                      href={`data:image/png;base64,${subTask.arquivo}`}
+                                                      download={`${subTask.nome
+                                                        .split(":")[0]
+                                                        .trim()}.png`}
+                                                      id="download-button"
+                                                      onClick={(e) =>
+                                                        e.stopPropagation()
+                                                      }
+                                                    >
+                                                      Fazer Download do Arquivo
+                                                    </a>
+                                                  </div>
+                                                )}
                                               </div>
                                             ) : (
                                               <div className="file-preview">
@@ -462,16 +546,36 @@ const AllTasks = () => {
                                                 A ESSA TAREFA
                                               </div>
                                             )}
-                                            <div className="file-input-container">
-                                              <p className="HighlightText">UPLOAD DE ARQUIVO</p>
+                                            <div
+                                              className="file-input-container"
+                                              style={
+                                                subTask.status
+                                                  ? { display: "none" }
+                                                  : {}
+                                              }
+                                            >
+                                              <p className="HighlightText">
+                                                UPLOAD DE ARQUIVO
+                                              </p>
                                               <input
                                                 type="file"
                                                 onChange={handleFileChange}
+                                                disabled={subTask.status}
+                                                className={
+                                                  subTask.status
+                                                    ? "ButtonDisabled"
+                                                    : ""
+                                                }
                                               />
-                                              <div className="file-actions" style={!selectedFile ? { display: 'none' } : {}}>
-                                                <button
-                                                  onClick={handlePreview}
-                                                >
+                                              <div
+                                                className="file-actions"
+                                                style={
+                                                  !selectedFile
+                                                    ? { display: "none" }
+                                                    : {}
+                                                }
+                                              >
+                                                <button onClick={handlePreview}>
                                                   Visualizar
                                                 </button>
                                                 <button
@@ -486,16 +590,21 @@ const AllTasks = () => {
                                                 </button>
                                               </div>
                                             </div>
-                                            <button 
-                                            className="finishButton"
-                                            onClick={() =>
-                                            finalizaSubTask(
-                                              task.id,
-                                              subTask.arquivo,
-                                              subTask.id
-                                            )
-                                            }
-                                            style={!subTask.arquivo ? { display: 'none' } : {}}
+                                            <button
+                                              className="finishButton"
+                                              onClick={() =>
+                                                finalizaSubTask(
+                                                  task.id,
+                                                  subTask.arquivo,
+                                                  subTask.id
+                                                )
+                                              }
+                                              style={
+                                                !subTask.arquivo ||
+                                                subTask.status
+                                                  ? { display: "none" }
+                                                  : {}
+                                              }
                                             >
                                               Concluir Tarefa
                                             </button>
@@ -507,6 +616,20 @@ const AllTasks = () => {
                                 )
                               )}
                             </table>
+                            <button
+                              id="finalizaFaseButton"
+                              onClick={() =>
+                                finalizaFase(task.id, faseSelecionada)
+                              }
+                              style={
+                                !liberaBotaoFase ||
+                                task.fases[faseSelecionada].status
+                                  ? { display: "none" }
+                                  : {}
+                              }
+                            >
+                              Concluir Fase
+                            </button>
                           </div>
                         </div>
                       </td>
